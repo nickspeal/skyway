@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Skyway Home Page</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    {% load static %}
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #mainContent {
+        height: 100%;
+      }
+
+      #map {
+        height: 50%;
+        width: 50%;
+      }
+       /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id=mainContent>
+      Fly your Drone
+      <div id="map"></div>
+      <br>
+      <form action="/go" id="form">
+        <input type="text" name="latitude" hidden=true/>
+        <input type="text" name="longitude" hidden=true/>
+      </form>
+      <!-- <input type="submit" value="Go!"id=goButton disabled=true /> -->
+      <button id=goButton disabled=true >Go!</button>
+    </div>
+    
+    <div id=flyingContent hidden=true>
+      Flight is in progress. ETA is {{time_estimate}} minutes.
+      <br>
+      <a id=cancelLink href=/>Cancel (doesnt work)</a>
+    </div>
+    <!-- Initialize the Map -->
+    <script src={% static  "map.js" %}></script>
+    <!-- Get the map from Google -->
+    <!-- Pass the initMap function from the above script as a callback to Google Maps -->
+    <script src="https://maps.googleapis.com/maps/api/js?key={{GOOGLE_API_KEY}}&callback=initMap"
+    async defer></script>
+    
+    <!-- Change the HTML when the drone is flying -->
+    <script>  
+    document.getElementById('goButton').onclick = () => {
+      document.getElementById('mainContent').hidden = true
+      document.getElementById('flyingContent').hidden = false
+      document.getElementById('form').submit()
+    }
+    </script>
+
+  </body>
+</html>

@@ -8,7 +8,7 @@ import math
 
 def _connect_to_drone():
   print 'Connecting to vehicle.'
-  vehicle = dronekit.connect('127.0.0.1:14550', wait_ready=True)
+  vehicle = dronekit.connect('tcp:127.0.0.1:5760', wait_ready=True)
   return vehicle
 
 def _start_motors(vehicle):

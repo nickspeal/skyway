@@ -5,8 +5,7 @@ import fly_drone
 
 
 def index(request):
-  context = {"time_estimate": 5, "GOOGLE_API_KEY": ADD IT HERE}
-  return render(request, 'skyway_app/index.html', context)
+  return render(request, 'skyway_app/index.html')
 
 def go(request):
   lat = request.GET.get('latitude', None)

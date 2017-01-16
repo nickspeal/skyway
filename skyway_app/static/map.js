@@ -1,4 +1,5 @@
 var map;
+var markers = [];
 
 function askForUserLocation(){
   // Try HTML5 geolocation.
@@ -9,6 +10,15 @@ function askForUserLocation(){
         lng: position.coords.longitude
       };
       map.setCenter(pos)
+      var image = '/static/homeicon.png';
+      console.log("home icon")
+      image.height = image.height/4
+      image.width = image.width/4
+      var homeIcon = new google.maps.Marker({
+          position: {lat: pos.lat, lng: pos.lng},
+          map: map,
+          icon: image
+      });
     }
     function geoLocationFailed(){
       console.error("Could not get user's location");
@@ -25,16 +35,21 @@ function askForUserLocation(){
 }
 
 function addListeners(){
+
   // On Click, remove all pins, add a pin, save location
   map.addListener('click', function(event) {
-    //TODO remove all pins
+    //clear any existing marker
+    for (var i = 0; i<markers.length;i++){
+      markers[i].setMap(null);
+    }
     console.log("map clicked. Current pos: ", event.latLng);
     console.log( "lat long: ", event.latLng.lat(), event.latLng.lng() );
-    
+
     const marker = new google.maps.Marker({
       position: event.latLng,
       map: map
     });
+    markers.push(marker);
 
     window.destination = [event.latLng.lng(), event.latLng.lat()];
     document.getElementById('goButton').disabled = false;
@@ -44,10 +59,11 @@ function addListeners(){
 
 }
 function initMap() {
-  askForUserLocation()
+
   map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: -34.397, lng: 150.644},
     zoom: 18
   });
+  askForUserLocation()
   addListeners()
 }

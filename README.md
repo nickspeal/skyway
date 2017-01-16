@@ -14,6 +14,7 @@ MAVProxy (1.5.7)
 
 * Start the simulator: `dronekit-sitl solo-2.0.20`
 * Use MAVProxy to split the TCP stream into 2 UDP streams such that multiple GCSes can connect to the drone: `mavproxy.py --master tcp:127.0.0.1:5760 --sitl 127.0.0.1:5501 --out 127.0.0.1:14550 --out`127.0.0.1:14551
+* Run the webserver: `python manage.py runserver`
 
 # Status
 

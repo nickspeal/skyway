@@ -12,6 +12,7 @@ function askForUserLocation(){
       map.setCenter(pos)
       var image = '/static/homeicon.png';
       console.log("home icon")
+      console.log("image.heigh: ", image.height, " & image.width: ", image.width)
       image.height = image.height/4
       image.width = image.width/4
       var homeIcon = new google.maps.Marker({

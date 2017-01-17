@@ -5,7 +5,7 @@ import fly_drone
 
 
 def index(request):
-  context = {'time_estimate': '5', 'GOOGLE_API_KEY': 'ADD IT HERE'}
+  context = {'time_estimate': '5', 'GOOGLE_API_KEY': 'ADD HERE'}
   return render(request, 'skyway_app/index.html', context)
 
 def go(request):

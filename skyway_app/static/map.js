@@ -1,5 +1,5 @@
 var map;
-var markers = [];
+var marker = null;
 
 function askForUserLocation(){
   // Try HTML5 geolocation.
@@ -13,8 +13,6 @@ function askForUserLocation(){
       var image = '/static/homeicon.png';
       console.log("home icon")
       console.log("image.heigh: ", image.height, " & image.width: ", image.width)
-      image.height = image.height/4
-      image.width = image.width/4
       var homeIcon = new google.maps.Marker({
           position: {lat: pos.lat, lng: pos.lng},
           map: map,
@@ -40,17 +38,17 @@ function addListeners(){
   // On Click, remove all pins, add a pin, save location
   map.addListener('click', function(event) {
     //clear any existing marker
-    for (var i = 0; i<markers.length;i++){
-      markers[i].setMap(null);
+ 
+    if (marker !== null){
+      marker.setMap(null);
     }
     console.log("map clicked. Current pos: ", event.latLng);
     console.log( "lat long: ", event.latLng.lat(), event.latLng.lng() );
 
-    const marker = new google.maps.Marker({
+    marker = new google.maps.Marker({
       position: event.latLng,
       map: map
     });
-    markers.push(marker);
 
     window.destination = [event.latLng.lng(), event.latLng.lat()];
     document.getElementById('goButton').disabled = false;

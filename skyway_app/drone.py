@@ -9,14 +9,22 @@ import math
 class drone(object):
 
   def __init__(self):
-    self.lat = -35.3400000
-    self.lon = 149.1640000
+    x = 0;
 
   def connectToDrone(self):
     print 'Connecting to vehicle.'
     self.solo = dronekit.connect('tcp:127.0.0.1:5760', wait_ready=True)
     self.homeLat = self.solo.location.global_frame.lat
     self.homeLon = self.solo.location.global_frame.lon
+
+    while self.homeLat == 0:
+      self.homeLat = self.solo.location.global_frame.lat
+      self.homeLon = self.solo.location.global_frame.lon
+      time.sleep(1)
+    
+    self.lat = self.homeLat
+    self.lon = self.homeLon
+    print "home location in drone.py, lat: ", self.homeLat, ". lon: ", self.homeLon
     print 'Made it past.'
 
   def takeoff(self, altitude=20):

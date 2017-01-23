@@ -5,7 +5,7 @@ var home = null;
 
 function askForUserLocation(){
   // Try HTML5 geolocation.
-  if (navigator.geolocation) {
+  /*if (navigator.geolocation) {
     function geoLocationSuccess(position){
       //console.log("lat: position.coords.latitude, ", lat: position.coords.latitude);
       //console.log("lng: position.coords.longitude, ", lng: position.coords.longitude);
@@ -19,20 +19,6 @@ function askForUserLocation(){
       };
 
       map.setCenter(pos)
-      var homeImage = '/static/homeicon.png';
-      var droneImage = '/static/droneicon.png';
-      //console.log("home icon")
-      //console.log("image.heigh: ", image.height, " & image.width: ", image.width)
-      home = new google.maps.Marker({
-          position: {lat: pos.lat, lng: pos.lng},
-          map: map,
-          icon: homeImage
-      });
-      tracker = new google.maps.Marker({
-          position: {lat: pos.lat, lng: pos.lng},
-          map: map,
-          icon: droneImage
-      });
       //console.log("here 5")
     }
     function geoLocationFailed(){
@@ -47,6 +33,7 @@ function askForUserLocation(){
   } else {
     console.error("Broweser does not support geolocation");
   }
+  */
 }
 
 function addListeners(){
@@ -67,26 +54,75 @@ function addListeners(){
       icon: targetImage
     });
 
+    var bound = new google.maps.LatLngBounds();
+
+    bound.extend(new google.maps.LatLng(home.getPosition().lat(),home.getPosition().lng()));
+    bound.extend(new google.maps.LatLng(marker.getPosition().lat(),marker.getPosition().lng()));
+
+    map.setCenter(bound.getCenter());
+
     window.destination = [event.latLng.lng(), event.latLng.lat()];
     document.getElementById('goButton').disabled = false;
     document.getElementById('form').elements["latitude"].value=event.latLng.lat()
     document.getElementById('form').elements["longitude"].value=event.latLng.lng()
   })
-
 }
-function initMap() {
 
+function getHomeCoordinates(){
+  console.log("getting home coordinates");
+  $.ajax({
+    url: '/homecoordinates/',
+    type: 'get',
+    //dataType : 'json'
+    success: function(data){
+      var pos = jQuery.parseJSON(data)
+      //console.log("pos: ", pos);
+      //console.log("map.js: pos.lat: ", pos.lat, "pos.lon: ", pos.lon)
+      //var pos = jQuery.parseJSON()
+
+      var homeImage = '/static/homeicon.png';
+      var droneImage = '/static/droneicon.png';
+      home = new google.maps.Marker({
+          position: {lat: pos.lat, lng: pos.lon},
+          map: map,
+          icon: homeImage
+      });
+      tracker = new google.maps.Marker({
+          position: {lat: pos.lat, lng: pos.lon},
+          map: map,
+          icon: droneImage
+      });
+      var pos2 = {
+        lat: pos.lat,
+        lng: pos.lon
+      };
+      map.setCenter(pos2)
+
+      //tracker.setMap(map);      
+      //tracker.setPosition({lat: pos.lat,lng: pos.lon});
+      //home.setMap(map);
+
+      //home.setPosition({lat: pos.lat,lng: pos.lon});
+    },
+    failure: function(data){
+      //alert('Got an error dude');
+    }
+  })
+}
+
+function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: -34.397, lng: 150.644},
     zoom: 18
   });
   //onsole.log("here 3")
-  askForUserLocation()
+  //askForUserLocation()
   addListeners()
+  getHomeCoordinates()
 }
-function refreshData()
-{
-  x = 1;
+
+function refreshData(){
+  x = 2;
   setTimeout(refreshData, x*1000);
   console.log("refreshing now");
   $.ajax({

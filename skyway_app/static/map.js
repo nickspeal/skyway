@@ -3,9 +3,11 @@ var marker = null;
 var tracker = null;
 var home = null;
 
+/* This is used to center at WiFi, but now centering at home (GPS)
+
 function askForUserLocation(){
   // Try HTML5 geolocation.
-  /*if (navigator.geolocation) {
+  if (navigator.geolocation) {
     function geoLocationSuccess(position){
       //console.log("lat: position.coords.latitude, ", lat: position.coords.latitude);
       //console.log("lng: position.coords.longitude, ", lng: position.coords.longitude);
@@ -33,8 +35,8 @@ function askForUserLocation(){
   } else {
     console.error("Broweser does not support geolocation");
   }
-  */
-}
+  
+}*/
 
 function addListeners(){
 

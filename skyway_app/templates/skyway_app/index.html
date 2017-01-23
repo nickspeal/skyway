@@ -48,15 +48,17 @@
     <!-- Pass the initMap function from the above script as a callback to Google Maps -->
    <script src="https://maps.googleapis.com/maps/api/js?key={{GOOGLE_API_KEY}}&callback=initMap"
     async defer></script>
-    
+    <!-- include jQuery -->
+    <script src={% static  "jquery.js" %}></script>
+
     <!-- Change the HTML when the drone is flying -->
     <script>  
-    document.getElementById('goButton').onclick = () => {
-      document.getElementById('mainContent').hidden = true
+      document.getElementById('goButton').onclick = () => {
+      document.getElementById('mainContent').hidden = false
       document.getElementById('flyingContent').hidden = false
       document.getElementById('form').submit()
+      refreshData()
     }
     </script>
-
   </body>
 </html>

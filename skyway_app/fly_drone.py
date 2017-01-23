@@ -6,6 +6,9 @@ import dronekit
 import time
 import math
 
+lat1 = 0;
+lng1 = 0;
+
 def _connect_to_drone():
   print 'Connecting to vehicle.'
   vehicle = dronekit.connect('tcp:127.0.0.1:5760', wait_ready=True)
@@ -57,6 +60,8 @@ def _flyToLocation(vehicle, destination, speed):
   while distanceToDestination > arrivalTolerance:
     distanceToDestination = _get_distance_metres(vehicle.location.global_relative_frame, destination)  
     print "Distance: {}".format(distanceToDestination)
+    lat1 = vehicle.location.global_frame.lat
+    #lng1 = vehicle.location.global_frame.lng
     time.sleep(1)
   print "Arrived in 2D Space"
   return
@@ -89,6 +94,12 @@ def execute(lat, lng):
   destination = dronekit.LocationGlobalRelative(float(lat), float(lng), 20)
   _flyToLocation(vehicle, destination=destination, speed=60)
   _land(vehicle)
+
+def getlat():
+  return lat1
+
+def getlng():
+  return lng1
 
 if __name__ == "__main__":
   lat = 39.32876637044429

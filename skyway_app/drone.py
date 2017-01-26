@@ -9,7 +9,8 @@ import math
 class drone(object):
 
   def __init__(self):
-    x = 0;
+    self.distanceToDestination = 10000
+    self.speed = 60
 
   def connectToDrone(self):
     print 'Connecting to vehicle.'
@@ -33,27 +34,27 @@ class drone(object):
     while not self.solo.is_armable:
       print " Waiting for vehicle to initialise..."
       time.sleep(1)
-    print "Arming motors"
+    #print "Arming motors"
     # Copter should arm in GUIDED mode
     self.solo.mode = dronekit.VehicleMode("GUIDED")
     self.solo.armed = True    
 
     # Confirm vehicle armed before attempting to take off
     while not self.solo.armed:      
-        print " Waiting for arming..."
+        #print " Waiting for arming..."
         time.sleep(.1)
 
-    print "Taking off!"
-    print "Altitude: ", altitude
+    #print "Taking off!"
+    #print "Altitude: ", altitude
     self.solo.simple_takeoff(altitude) # Take off to target altitude
 
     # Wait until the vehicle reaches a safe height before processing the goto (otherwise the command 
     #  after Vehicle.simple_takeoff will execute immediately).
     while True:
-        print " Altitude: ", self.solo.location.global_relative_frame.alt 
+        #print " Altitude: ", self.solo.location.global_relative_frame.alt 
         #Break and return from function just below target altitude.        
         if self.solo.location.global_relative_frame.alt>=altitude*0.95: 
-            print "Reached target altitude"
+            #print "Reached target altitude"
             break
         else:
           time.sleep(1)
@@ -77,34 +78,36 @@ class drone(object):
   def flyTo(self, lat, lon, speed):
     destination = dronekit.LocationGlobalRelative(float(lat), float(lon), 20)
 
-    print "Flying to location at speed: ", speed
+    #print "Flying to location at speed: ", speed
     self.solo.airspeed = speed
     self.solo.simple_goto(destination)
 
     # wait for travel
-    distanceToDestination = self.get_distance_metres(self.solo.location.global_relative_frame, destination)
+    self.distanceToDestination = self.get_distance_metres(self.solo.location.global_relative_frame, destination)
     arrivalTolerance = 0.8
 
-    while distanceToDestination > arrivalTolerance:
+    while self.distanceToDestination > arrivalTolerance:
       #print "solo location: ", self.solo.location.global_relative_frame
       #print "destination: ", destination
-      distanceToDestination = self.get_distance_metres(self.solo.location.global_relative_frame, destination)  
-      print "Distance: {}".format(distanceToDestination)
+      self.distanceToDestination = self.get_distance_metres(self.solo.location.global_relative_frame, destination)  
+      #print "Distance: {}".format(self.distanceToDestination)
       #print "self.solo.location.global_frame.lat: ", self.solo.location.global_frame.lat
       #print "self.solo.location.global_frame.lon: ", self.solo.location.global_frame.lon
       self.lat = self.solo.location.global_frame.lat
       self.lon = self.solo.location.global_frame.lon
       #self.lon = self.solo.location.global_frame.lon      
       time.sleep(1)
-    print "Arrived in 2D Space"
-    self.land()
+    
+    #print "Arrived in 2D Space"
+    self.solo.mode = dronekit.VehicleMode("LAND")
+     #self.land()
 
   def land(self):
-    print("Setting LAND mode...")
+    #print("Setting LAND mode...")
     self.solo.mode = dronekit.VehicleMode("LAND")
 
     while self.solo.armed == True:
-      print "Landing - Vehicle armed state: ", self.solo.armed
+      #print "Landing - Vehicle armed state: ", self.solo.armed
       time.sleep(1)
 
   def gethomeLat(self):
@@ -118,3 +121,15 @@ class drone(object):
 
   def getlon(self):
     return self.lon
+
+  def getSpeed(self):
+    return self.solo.airspeed
+
+  def getElevation(self):
+    return self.solo.location.global_relative_frame.alt
+
+  def getETA(self):
+    return ((self.distanceToDestination)/self.speed)
+
+  def getState(self):
+    return self.solo.mode.name

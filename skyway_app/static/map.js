@@ -2,6 +2,7 @@ var map;
 var marker = null;
 var tracker = null;
 var home = null;
+var droneImage = null;
 
 /* This is used to center at WiFi, but now centering at home (GPS)
 
@@ -64,14 +65,14 @@ function addListeners(){
     map.setCenter(bound.getCenter());
 
     window.destination = [event.latLng.lng(), event.latLng.lat()];
-    document.getElementById('goButton').disabled = false;
+    document.getElementById('FlyButton').disabled = false;
     document.getElementById('form').elements["latitude"].value=event.latLng.lat()
     document.getElementById('form').elements["longitude"].value=event.latLng.lng()
   })
 }
 
 function getHomeCoordinates(){
-  console.log("getting home coordinates");
+  //console.log("getting home coordinates");
   $.ajax({
     url: '/homecoordinates/',
     type: 'get',
@@ -83,7 +84,7 @@ function getHomeCoordinates(){
       //var pos = jQuery.parseJSON()
 
       var homeImage = '/static/homeicon.png';
-      var droneImage = '/static/droneicon.png';
+      droneImage = '/static/droneicon.png';
       home = new google.maps.Marker({
           position: {lat: pos.lat, lng: pos.lon},
           map: map,
@@ -126,7 +127,8 @@ function initMap() {
 function refreshData(){
   x = 2;
   setTimeout(refreshData, x*1000);
-  console.log("refreshing now");
+  //console.log("refreshing now");
+  droneImage = '/static/droneicon.png';
   $.ajax({
     url: '/coordinates/',
     type: 'get',
@@ -139,8 +141,13 @@ function refreshData(){
       //var pos = jQuery.parseJSON()
       tracker = new google.maps.Marker({
         position: {lat: pos.lat,lng: pos.lon},
-        map: map
+        map: map,
+        icon: droneImage
       });
+      document.getElementById('elevation').innerHTML = pos.elevation.toFixed(1)
+      document.getElementById('speed').innerHTML = pos.speed.toFixed(1)
+      document.getElementById('eta').innerHTML = pos.eta.toFixed(1)
+      document.getElementById('state').innerHTML = pos.state
     },
     failure: function(data){
       //alert('Got an error dude');

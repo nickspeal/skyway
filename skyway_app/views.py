@@ -40,18 +40,24 @@ def coordinates(request):
   #print solo
   lat = solo.getlat()
   lon = solo.getlon()
-  #print "lat: ", lat, ". lon: ", lon
-  data = {'lat':lat,'lon':lon}
-  #print "data: ", data
-  #print "data.lat: ", data['lat'], "data.lon: ", data['lon']
+  elevation = solo.getElevation()
+  speed = solo.getSpeed()
+  eta = solo.getETA()
+  state = solo.getState()
+  print "home location, lat: ", lat, ". lon: ", lon, ". elevation: ", elevation, ". speed: ", speed, ". eta: ", eta
+  data = {'lat':lat,'lon':lon,'elevation':elevation,'speed':speed,'eta':eta,'state':state}
+
   return HttpResponse(json.dumps(data))
 
 def homecoordinates(request):
   #print solo
   lat = solo.gethomeLat()
   lon = solo.gethomeLon()
+  elevation = solo.getElevation()
+  speed = solo.getSpeed()
+  eta = solo.getETA()
+
   print "home location, lat: ", lat, ". lon: ", lon
   data = {'lat':lat,'lon':lon}
-  #print "data: ", data
-  #print "data.lat: ", data['lat'], "data.lon: ", data['lon']
+
   return HttpResponse(json.dumps(data))

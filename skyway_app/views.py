@@ -7,57 +7,55 @@ import json
 solo = drone.drone()
 soloconnected = False
 
-def index(request):
+def index(request):  
+  #print "here 1"
+  context = {'time_estimate': '5', 'GOOGLE_API_KEY': 'AIzaSyBN-Q9c7O40j-z3TRcc3KFHRRcpP290s-8'}     
+  #print "here 2"
+  return render(request, 'skyway_app/index.html', context)
+
+def connect(request):
   global soloconnected
   if soloconnected == False:
     solo.connectToDrone()
     soloconnected = True
-  
-  print "here 1"
-  context = {'time_estimate': '5', 'GOOGLE_API_KEY': 'AIzaSyBN-Q9c7O40j-z3TRcc3KFHRRcpP290s-8'}     
-  print "here 2"
-  return render(request, 'skyway_app/index.html', context)
-
-def go(request):
-  print "go executing"
-  lat = request.GET.get('latitude', None)
-  lon = request.GET.get('longitude', None)
-  if not lat or not lon:
-    print "ERROR: BAD URL PARAMETERS"
-  # call the dronekit module we wrote before
-  request.session['testing2']= "testing2"
-  solo.takeoff()
-  resp = "Arrived and landed."
-  solo.flyTo(lat,lon, 500)
-  resp = "Arrived and landed. <br> <a href=/rtl>Return Home</a>"
+  resp = None
   return HttpResponse(resp)
 
-def rtl(request):
-  resp = "Drone is (not) coming home. ETA is 5 minutes. <br> <a href=/>Try Again</a>"
+def go(request):
+  lat = request.GET.get('latitude', None)
+  lng = request.GET.get('longitude', None)
+  alt = 20 # TODO would be nice to specify this in the UI
+  speed = 15
+  if lat == "" or lng == "":
+    print "ERROR: BAD URL PARAMETERS"
+  
+  # takeoff returns after takeoff success
+  if not solo.getArmed():
+    solo.takeoff(alt)
+
+  # flyTo returns after landing success.
+  solo.flyTo(lat, lng, alt, speed)
+  resp = "Arrived and landed."
+  # resp = "Arrived and landed. <br> <a href=/rtl>Return Home</a>"   # Return home button for later
   return HttpResponse(resp)
 
 def coordinates(request):
   #print solo
-  lat = solo.getlat()
-  lon = solo.getlon()
+  lat = solo.getLat()
+  lon = solo.getLng()
   elevation = solo.getElevation()
   speed = solo.getSpeed()
   eta = solo.getETA()
-  state = solo.getState()
-  print "home location, lat: ", lat, ". lon: ", lon, ". elevation: ", elevation, ". speed: ", speed, ". eta: ", eta
-  data = {'lat':lat,'lon':lon,'elevation':elevation,'speed':speed,'eta':eta,'state':state}
+  mode = solo.getMode()
+  armable = solo.isArmable()
+  #print "home location, lat: ", lat, ". lon: ", lon, ". elevation: ", elevation, ". speed: ", speed, ". eta: ", eta
+  data = {'lat':lat,'lon':lon,'elevation':elevation,'speed':speed,'eta':eta,'mode':mode, 'armable':armable}
 
   return HttpResponse(json.dumps(data))
 
 def homecoordinates(request):
-  #print solo
-  lat = solo.gethomeLat()
-  lon = solo.gethomeLon()
-  elevation = solo.getElevation()
-  speed = solo.getSpeed()
-  eta = solo.getETA()
+  lat = solo.getHomeLat()
+  lng = solo.getHomeLng()
 
-  print "home location, lat: ", lat, ". lon: ", lon
-  data = {'lat':lat,'lon':lon}
-
+  data = {'lat':lat,'lng':lng}
   return HttpResponse(json.dumps(data))

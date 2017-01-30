@@ -36,21 +36,25 @@
     <div class="top-bar-left">
       <ul class="dropdown menu" data-dropdown-menu>
         <li class="menu-text">Skyway</li>
+        <li><a id="Connect" disabled="true">Connect</a></li>        
         <li><a id="FlyButton" disabled="true">Fly</a></li>
-        <li><a href="#">Return Home</a></li>
       </ul>
     </div>
   </div>
   <div class="row">
     <div class="small-2 medium-2 large-2 column">
-      <h5>State</h5>
-      <span id="state" class="label secondary">Resting</span>
+      <h5>Connection</h5>
+      <span id="connected" class="label secondary">Not connected</span>   
+      <h5>Mode</h5>
+      <span id="mode" class="label secondary">Unknown</span>
+      <h5>Armable</h5>
+      <span id="armable" class="label secondary">Unknown</span>      
       <h5>Elevation</h5>      
-      <span id="elevation" class="label secondary">0m</span>
+      <span id="elevation" class="label secondary">Not started</span>
       <h5>Speed</h5>
-      <span id="speed" class="label secondary">20m/s</span>
+      <span id="speed" class="label secondary">Not started</span>
       <h5>ETA</h5>
-      <span id="eta" class="label secondary">5min</span> 
+      <span id="eta" class="label secondary">Not applicable</span>    
     </div>
     <div id="map" class="small-10 medium-10 large-10 column">
       <br>
@@ -82,10 +86,11 @@
     <!-- Change the HTML when the drone is flying -->
     <script>  
       document.getElementById('FlyButton').onclick = () => {
-      document.getElementById('state').innerHTML = "Flying"
-      document.getElementById('form').submit()
-      refreshData()
-    }
+        document.getElementById('form').submit();
+      }
+      document.getElementById('Connect').onclick = () => {
+        connectDrone();
+      }
     </script>
   </body>
 </html>

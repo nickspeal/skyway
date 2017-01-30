@@ -1,62 +1,96 @@
 <!DOCTYPE html>
 <html>
+  <!-- Compressed CSS -->
+  <link rel="stylesheet" href="static/css/foundation.css">
+
+  <!-- Compressed JavaScript
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.3.0/js/foundation.min.js"></script>-->
+
   <head>
     <title>Skyway Home Page</title>
     <meta name="viewport" content="initial-scale=1.0">
     <meta charset="utf-8">
+
     {% load static %}
     <style>
       /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
-      #mainContent {
+      /*#mainContent {
         height: 100%;
-      }
+      }*/
 
       #map {
-        height: 50%;
-        width: 50%;
+        height: 500px;
+        width: 80%;
       }
-       /* Optional: Makes the sample page fill the window. */
+       /* Optional: Makes the sample page fill the window.
       html, body {
         height: 100%;
         margin: 0;
         padding: 0;
-      }
+      }*/
     </style>
   </head>
   <body>
-    <div id=mainContent>
-      Fly your Drone
-      <div id="map"></div>
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <ul class="dropdown menu" data-dropdown-menu>
+        <li class="menu-text">Skyway</li>
+        <li><a id="Connect" disabled="true">Connect</a></li>        
+        <li><a id="FlyButton" disabled="true">Fly</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="row">
+    <div class="small-2 medium-2 large-2 column">
+      <h5>Connection</h5>
+      <span id="connected" class="label secondary">Not connected</span>   
+      <h5>Mode</h5>
+      <span id="mode" class="label secondary">Unknown</span>
+      <h5>Armable</h5>
+      <span id="armable" class="label secondary">Unknown</span>      
+      <h5>Elevation</h5>      
+      <span id="elevation" class="label secondary">Not started</span>
+      <h5>Speed</h5>
+      <span id="speed" class="label secondary">Not started</span>
+      <h5>ETA</h5>
+      <span id="eta" class="label secondary">Not applicable</span>    
+    </div>
+    <div id="map" class="small-10 medium-10 large-10 column">
       <br>
-      <form action="/go" id="form">
-        <input type="text" name="latitude" hidden=true/>
-        <input type="text" name="longitude" hidden=true/>
-      </form>
+
       <!-- <input type="submit" value="Go!"id=goButton disabled=true /> -->
       <button id=goButton disabled=true >Go!</button>
     </div>
-    
+
     <div id=flyingContent hidden=true>
       Flight is in progress. ETA is {{time_estimate}} minutes.
       <br>
       <a id=cancelLink href=/>Cancel (doesnt work)</a>
     </div>
+
+    <form action="/go" id="form">
+      <input type="text" name="latitude" hidden=true/>
+      <input type="text" name="longitude" hidden=true/>
+    </form>
+
     <!-- Initialize the Map -->
     <script src={% static  "map.js" %}></script>
     <!-- Get the map from Google -->
     <!-- Pass the initMap function from the above script as a callback to Google Maps -->
     <script src="https://maps.googleapis.com/maps/api/js?key={{GOOGLE_API_KEY}}&callback=initMap"
     async defer></script>
-    
+    <!-- include jQuery -->
+    <script src={% static  "jquery.js" %}></script>
+
     <!-- Change the HTML when the drone is flying -->
     <script>  
-    document.getElementById('goButton').onclick = () => {
-      document.getElementById('mainContent').hidden = true
-      document.getElementById('flyingContent').hidden = false
-      document.getElementById('form').submit()
-    }
+      document.getElementById('FlyButton').onclick = () => {
+        document.getElementById('form').submit();
+      }
+      document.getElementById('Connect').onclick = () => {
+        connectDrone();
+      }
     </script>
-
   </body>
 </html>

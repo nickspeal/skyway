@@ -15,6 +15,9 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
+
+SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
@@ -25,7 +28,10 @@ SECRET_KEY = 'p$%u!1^j82hok)x2hmn_!nk=7os*ji(ox3j65m4+=utjybyc_)'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '0.0.0.0',
+    '10.1.1.134'
+]
 
 
 # Application definition

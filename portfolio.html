@@ -1,0 +1,56 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Foundation | Welcome</title>
+    <link rel="stylesheet" href="http://dhbhdrzi4tiry.cloudfront.net/cdn/sites/foundation.min.css">
+  </head>
+  <body>
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <ul class="dropdown menu" data-dropdown-menu>
+        <li class="menu-text">Skyway</li>
+        <li><a href="#">Fly</a></li>
+        <li><a href="#">Return Home</a></li>
+      </ul>
+    </div>
+  </div>
+    <div class="row">
+      
+      <div class="small-2 medium-2 large-2 column">
+          <br>
+          <span class="label secondary">Resting</span>
+          <h5>State</h5>
+          <span class="label secondary">0m</span>
+          <br>
+          <h5>Elevation</h5>
+          <span class="label secondary">20m/s</span>
+          <br>
+          <h5>Speed</h5>
+          <span class="label secondary">5min</span>
+          <br>
+          <h5>ETA</h5>  
+      </div>
+      <style>
+        #map {
+            height: 800px;
+            width: 80%;
+        }
+      </style>
+      <div id="map" class="small-10 medium-10 large-10 column">
+        <script src="map.js"}></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBN-Q9c7O40j-z3TRcc3KFHRRcpP290s-8&callback=initMap" async defer></script>
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="http://dhbhdrzi4tiry.cloudfront.net/cdn/sites/foundation.js"></script>
+    <script>
+      $(document).foundation();
+    </script>
+  </body>
+</html>
+
+
+    
